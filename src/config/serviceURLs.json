@@ -1,0 +1,7 @@
+{
+    "CustomerService" : "https://localhost:44383/Customers/",
+    "ProductService" : "https://localhost:44389/Product/",
+    "OrderService" : "",
+    "CartService" : ""
+    
+}
