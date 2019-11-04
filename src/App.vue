@@ -12,7 +12,8 @@
 
 <script>
 //import * as customerService from "./services/customer.js";
-import * as productService from "./services/product.js";
+//import * as productService from "./services/product.js";
+import * as orderService from "./services/order.js";
 import ServicesConfig from "./config/serviceURLs.json";
 
 export default {
@@ -25,8 +26,9 @@ export default {
     async onClick() {
       //let URL = ServicesConfig["CustomerService"];
       //let tmp = await customerService.getAllCustomers(URL);
-      let URL = ServicesConfig["ProductService"];
+      //let URL = ServicesConfig["ProductService"];
 
+      let URL = ServicesConfig["OrderService"];
       /* Test updateCustomer */
       /* let tmp = await customerService.updateCustomer(
         URL,
@@ -60,16 +62,28 @@ export default {
       //let tmp = await productService.updateProduct(URL, 1, "Grommet", 0.02, 0.005, "YES");
 
       /* Test addProduct */
-      let tmp = await productService.addProduct(
+      /*let tmp = await productService.addProduct(
         URL,
         "TestProd",
         1.34,
         0.69,
         "YES"
-      );
+      );*/
 
       /* Test deleteProduct */
       //let tmp = await productService.deleteProduct(URL, 4);
+
+      /* Test getOrderDetails */
+      //let tmp = await orderService.getOrderDetails(URL, 1);
+
+      /*Test updateOrder */
+      let tmp = await orderService.updateOrder(
+        URL,
+        4,
+        1,
+        "TESTPO",
+        "2019-11-04"
+      );
 
       console.log(tmp);
     }
