@@ -172,7 +172,7 @@ export default {
           URL,
           parseInt(this.orderID, 10),
           parseInt(this.prodID, 10),
-          parseInt(this.quantity, 10),
+          parseInt(this.quantity, 10)
         );
         this.error = false;
         this.success = true;

@@ -1,7 +1,7 @@
 {
-    "CustomerService" : "https://localhost:5001/Customers/",
-    "ProductService" : "https://localhost:5001/Product/",
-    "OrderService" : "https://localhost:5001/api/order/",
-    "CartService" : "https://localhost:5001/api/cart/"   
+    "CustomerService" : "https://localhost:5004/Customers/",
+    "ProductService" : "https://localhost:5006/Product/",
+    "OrderService" : "http://localhost:49311/api/order/",
+    "CartService" : "http://localhost:49194/api/cart/"   
 }
 
