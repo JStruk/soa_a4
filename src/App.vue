@@ -5,6 +5,7 @@
       <router-link to="/users">Users</router-link>|
       <router-link to="/products">Products</router-link>|
       <router-link to="/orders">Orders</router-link>|
+      <router-link to="/orders">Cart</router-link>
     </div>
     <router-view />
     <button @click="onClick()">Test</button>
