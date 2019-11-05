@@ -35,28 +35,28 @@
               <th class="text-left p-3 px-5">Quantity</th>
             </tr>
             <tr
-              v-for="(order, index) in orderList"
-              v-bind:key="order.orderID"
+              v-for="(cart, index) in cartList"
+              v-bind:key="cart.orderID"
               class="border-b hover:bg-orange-100 bg-gray-100"
             >
               <td class="p-3 px-5">
                 <input
                   type="text"
-                  v-model="orderList[index].orderID"
+                  v-model="cartList[index].OrderID"
                   class="bg-transparent"
                 />
               </td>
               <td class="p-3 px-5">
                 <input
                   type="text"
-                  v-model="orderList[index].prodID"
+                  v-model="cartList[index].ProductID"
                   class="bg-transparent"
                 />
               </td>
               <td class="p-3 px-5">
                 <input
                   type="text"
-                  v-model="orderList[index].quantity"
+                  v-model="cartList[index].Quantity"
                   class="bg-transparent"
                 />
               </td>
@@ -66,9 +66,9 @@
                   class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
                   @click="
                     saveCart(
-                      cartList[index].orderID,
-                      cartList[index].prodID,
-                      cartList[index].quantity
+                      cartList[index].OrderID,
+                      cartList[index].ProductID,
+                      cartList[index].Quantity
                     )
                   "
                 >
@@ -77,7 +77,7 @@
                 <button
                   type="button"
                   class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
-                  @click="deleteCart(cartList[index].custID)"
+                  @click="deleteCart(cartList[index].CartID)"
                 >
                   Delete
                 </button>
@@ -117,8 +117,8 @@
 </template>
 
 <script>
-//import * as cartService from "@/services/cart.js";
-// import ServicesConfig from "@/config/serviceURLs.json";
+import * as cartService from "@/services/cart.js";
+import ServicesConfig from "@/config/serviceURLs.json";
 
 export default {
   data() {
@@ -133,66 +133,60 @@ export default {
     };
   },
   async created() {
-    // let URL = ServicesConfig["CartService"];
-    //this.cartList = await cartService.getAllCarts(URL);
+    let URL = ServicesConfig["CartService"];
+    this.cartList = await cartService.getAllCarts(URL);
+  },
+  methods: {
+    async saveCart(orderID, prodID, quantity) {
+      let URL = ServicesConfig["CartService"];
+      try {
+        await cartService.updateCart(URL, orderID, prodID, quantity);
+        this.error = false;
+        this.success = true;
+        this.successMessage = "Successfully updated the cart!";
+      } catch (error) {
+        this.error = true;
+        this.success = false;
+        console.log("Error", error);
+      }
+    },
+    async deleteCart(cartID) {
+      let URL = ServicesConfig["CartService"];
+      try {
+        await cartService.deleteCart(URL, cartID);
+        this.error = false;
+        this.success = true;
+        this.successMessage = "Successfully deleted the cart!";
+        this.cartList = await cartService.getAllProducts(URL);
+      } catch (error) {
+        this.error = true;
+        this.success = false;
+        console.log("Error", error);
+      }
+    },
+    async createCart() {
+      console.log("attempting to create user");
+      let URL = ServicesConfig["CartService"];
+      try {
+        await cartService.addCart(
+          URL,
+          parseInt(this.orderID, 10),
+          parseInt(this.prodID, 10),
+          parseInt(this.quantity, 10),
+        );
+        this.error = false;
+        this.success = true;
+        this.successMessage = "Successfully created the cart!";
+        this.cartList = await cartService.getAllCarts(URL);
+        this.orderID = "";
+        this.prodID = "";
+        this.quantity = "";
+      } catch (error) {
+        this.error = true;
+        this.success = false;
+        console.log("Error", error);
+      }
+    }
   }
-  //   methods: {
-  //     async saveCart(orderID, prodID, quantity) {
-  //       let URL = ServicesConfig["CartService"];
-  //       try {
-  //         await cartService.updateCart(
-  //           URL,
-  //           orderID,
-  //           prodID,
-  //           quantity,
-  //         );
-  //         this.error = false;
-  //         this.success = true;
-  //         this.successMessage = "Successfully updated the cart!";
-  //       } catch (error) {
-  //         this.error = true;
-  //         this.success = false;
-  //         console.log("Error", error);
-  //       }
-  //     },
-  //     async deleteCart(productID) {
-  //       let URL = ServicesConfig["CartService"];
-  //       try {
-  //         await productService.deleteCart(URL, productID);
-  //         this.error = false;
-  //         this.success = true;
-  //         this.successMessage = "Successfully deleted the cart!";
-  //         this.cartList = await productService.getAllProducts(URL);
-  //       } catch (error) {
-  //         this.error = true;
-  //         this.success = false;
-  //         console.log("Error", error);
-  //       }
-  //     },
-  //     async createCart() {
-  //       console.log("attempting to create user");
-  //       let URL = ServicesConfig["ProductService"];
-  //       try {
-  //         await productService.addProduct(
-  //           URL,
-  //           this.productName,
-  //           parseFloat(this.price),
-  //           parseFloat(this.weight),
-  //           this.inStock
-  //         );
-  //         this.error = false;
-  //         this.success = true;
-  //         this.successMessage = "Successfully created the product!";
-  //         this.cartList = await productService.getAllProducts(URL);
-  //         this.price = "";
-  //         this.weight = "";
-  //         this.inStock = "";
-  //       } catch (error) {
-  //         this.error = true;
-  //         this.success = false;
-  //         console.log("Error", error);
-  //       }
-  //     }
-  //   }
 };
 </script>

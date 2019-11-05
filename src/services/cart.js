@@ -118,6 +118,6 @@ export const deleteCart = async (url, _OrderID, _ProductID) => {
   const response = await axios.delete(url, body, {
     headers: _headers
   });
-  
+
   return response.data;
 };
