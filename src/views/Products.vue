@@ -20,9 +20,7 @@
         class="inline-flex bg-green-600 text-white rounded-full h-6 px-3 justify-center items-center"
         >SUCCESS</span
       >
-      <span class="inline-flex px-2 text-green-600"
-        >{{successMessage}}</span
-      >
+      <span class="inline-flex px-2 text-green-600">{{ successMessage }}</span>
     </div>
     <div class="text-gray-900 bg-gray-200 about">
       <div class="p-4 flex">
@@ -38,7 +36,7 @@
               <th class="text-left p-3 px-5">In Store</th>
             </tr>
             <tr
-              v-for="(product,index) in productList"
+              v-for="(product, index) in productList"
               v-bind:key="product.prodID"
               class="border-b hover:bg-orange-100 bg-gray-100"
             >
@@ -80,7 +78,7 @@
                       productList[index].prodName,
                       productList[index].price,
                       productList[index].prodWeight,
-                      productList[index].inStock,
+                      productList[index].inStock
                     )
                   "
                 >
@@ -95,11 +93,8 @@
                 </button>
               </td>
             </tr>
-            <tr
-  
-              class="border-b hover:bg-orange-100 bg-gray-100"
-            >
-            <td class="p-3 px-5">
+            <tr class="border-b hover:bg-orange-100 bg-gray-100">
+              <td class="p-3 px-5">
                 <input
                   type="text"
                   class="bg-transparent"
@@ -107,25 +102,13 @@
                 />
               </td>
               <td class="p-3 px-5">
-                <input
-                  type="text"
-                  class="bg-transparent"
-                  v-model="price"
-                />
+                <input type="text" class="bg-transparent" v-model="price" />
               </td>
               <td class="p-3 px-5">
-                <input
-                  type="text"
-                  class="bg-transparent"
-                  v-model="weight"
-                />
+                <input type="text" class="bg-transparent" v-model="weight" />
               </td>
               <td class="p-3 px-5">
-                <input
-                  type="text"
-                  class="bg-transparent"
-                  v-model="inStock"
-                />
+                <input type="text" class="bg-transparent" v-model="inStock" />
               </td>
               <td class="p-3 px-5 flex justify-end">
                 <button
@@ -164,7 +147,7 @@ export default {
       productName: "",
       price: "",
       weight: "",
-      inStock: "",
+      inStock: ""
     };
   },
   async created() {
@@ -185,7 +168,7 @@ export default {
         );
         this.error = false;
         this.success = true;
-        this.successMessage = "Successfully updated the product!"
+        this.successMessage = "Successfully updated the product!";
       } catch (error) {
         this.error = true;
         this.success = false;
@@ -198,7 +181,7 @@ export default {
         await productService.deleteProduct(URL, productID);
         this.error = false;
         this.success = true;
-        this.successMessage = "Successfully deleted the product!"
+        this.successMessage = "Successfully deleted the product!";
         this.productList = await productService.getAllProducts(URL);
       } catch (error) {
         this.error = true;
@@ -215,11 +198,11 @@ export default {
           this.productName,
           parseFloat(this.price),
           parseFloat(this.weight),
-          this.inStock,
+          this.inStock
         );
         this.error = false;
         this.success = true;
-        this.successMessage = "Successfully created the product!"
+        this.successMessage = "Successfully created the product!";
         this.productList = await productService.getAllProducts(URL);
         this.price = "";
         this.weight = "";
@@ -229,7 +212,7 @@ export default {
         this.success = false;
         console.log("Error", error);
       }
-    },
+    }
   }
 };
 </script>

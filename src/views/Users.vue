@@ -20,9 +20,7 @@
         class="inline-flex bg-green-600 text-white rounded-full h-6 px-3 justify-center items-center"
         >SUCCESS</span
       >
-      <span class="inline-flex px-2 text-green-600"
-        >{{successMessage}}</span
-      >
+      <span class="inline-flex px-2 text-green-600">{{ successMessage }}</span>
     </div>
     <div class="text-gray-900 bg-gray-200 about">
       <div class="p-4 flex">
@@ -38,7 +36,7 @@
               <th class="text-left p-3 px-5">Role</th>
             </tr>
             <tr
-              v-for="(customer,index) in customerList"
+              v-for="(customer, index) in customerList"
               v-bind:key="customer.id"
               class="border-b hover:bg-orange-100 bg-gray-100"
             >
@@ -93,23 +91,12 @@
                 </button>
               </td>
             </tr>
-            <tr
-  
-              class="border-b hover:bg-orange-100 bg-gray-100"
-            >
-            <td class="p-3 px-5">
-                <input
-                  type="text"
-                  class="bg-transparent"
-                  v-model="firstName"
-                />
+            <tr class="border-b hover:bg-orange-100 bg-gray-100">
+              <td class="p-3 px-5">
+                <input type="text" class="bg-transparent" v-model="firstName" />
               </td>
               <td class="p-3 px-5">
-                <input
-                  type="text"
-                  class="bg-transparent"
-                  v-model="lastName"
-                />
+                <input type="text" class="bg-transparent" v-model="lastName" />
               </td>
               <td class="p-3 px-5">
                 <input
@@ -160,7 +147,7 @@ export default {
       successMessage: "",
       firstName: "",
       lastName: "",
-      phoneNumber: "",
+      phoneNumber: ""
     };
   },
   async created() {
@@ -182,7 +169,7 @@ export default {
         );
         this.error = false;
         this.success = true;
-        this.successMessage = "Successfully updated the user!"
+        this.successMessage = "Successfully updated the user!";
       } catch (error) {
         this.error = true;
         this.success = false;
@@ -197,11 +184,11 @@ export default {
           URL,
           this.firstName,
           this.lastName,
-          this.phoneNumber,
+          this.phoneNumber
         );
         this.error = false;
         this.success = true;
-        this.successMessage = "Successfully created the user!"
+        this.successMessage = "Successfully created the user!";
         this.customerList = await customerService.getAllCustomers(URL);
         this.firstName = "";
         this.lastName = "";
@@ -217,7 +204,7 @@ export default {
         await customerService.deleteCustomer(URL, customerID);
         this.error = false;
         this.success = true;
-        this.successMessage = "Successfully deleted the user!"
+        this.successMessage = "Successfully deleted the user!";
         this.customerList = await customerService.getAllCustomers(URL);
       } catch (error) {
         this.error = true;

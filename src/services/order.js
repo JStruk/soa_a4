@@ -12,7 +12,6 @@ export const getOrderDetails = async (url, id) => {
   return response.data;
 };
 
-
 /* METHOD		:   getAllCustomers
  * DESCRIPTION	:   Calls the Customers REST API to get a JSON object of all customers
  *

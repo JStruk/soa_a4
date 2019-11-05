@@ -20,9 +20,7 @@
         class="inline-flex bg-green-600 text-white rounded-full h-6 px-3 justify-center items-center"
         >SUCCESS</span
       >
-      <span class="inline-flex px-2 text-green-600"
-        >{{successMessage}}</span
-      >
+      <span class="inline-flex px-2 text-green-600">{{ successMessage }}</span>
     </div>
     <div class="text-gray-900 bg-gray-200 about">
       <div class="p-4 flex">
@@ -37,7 +35,7 @@
               <th class="text-left p-3 px-5">Order Date</th>
             </tr>
             <tr
-              v-for="(order,index) in orderList"
+              v-for="(order, index) in orderList"
               v-bind:key="order.prodID"
               class="border-b hover:bg-orange-100 bg-gray-100"
             >
@@ -71,7 +69,7 @@
                       orderList[index].OrderID,
                       orderList[index].CustomerID,
                       orderList[index].PONumber,
-                      orderList[index].Date,
+                      orderList[index].Date
                     )
                   "
                 >
@@ -81,6 +79,40 @@
                   type="button"
                   class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
                   @click="deleteOrder(orderList[index].prodId)"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+            <tr class="border-b hover:bg-orange-100 bg-gray-100">
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                  class="bg-transparent"
+                  v-model="customerID"
+                />
+              </td>
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                  class="bg-transparent"
+                  v-model="orderNumber"
+                />
+              </td>
+              <td class="p-3 px-5">
+                <input type="text" class="bg-transparent" v-model="orderDate" />
+              </td>
+              <td class="p-3 px-5 flex justify-end">
+                <button
+                  type="button"
+                  class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                  @click="createOrder()"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
                 >
                   Delete
                 </button>
@@ -104,6 +136,9 @@ export default {
       error: false,
       success: false,
       successMessage: "",
+      customerID: "",
+      orderNumber: "",
+      orderDate: ""
     };
   },
   async created() {
@@ -119,11 +154,11 @@ export default {
           orderID,
           customerID,
           PONumber,
-          new Date(orderDate),
+          new Date(orderDate)
         );
         this.error = false;
         this.success = true;
-        this.successMessage = "Successfully updated the order!"
+        this.successMessage = "Successfully updated the order!";
       } catch (error) {
         this.error = true;
         this.success = false;
@@ -136,8 +171,31 @@ export default {
         await orderService.deleteOrder(URL, orderID);
         this.error = false;
         this.success = true;
-        this.successMessage = "Successfully deleted the order!"
+        this.successMessage = "Successfully deleted the order!";
         this.orderList = await orderService.getAllorders(URL);
+      } catch (error) {
+        this.error = true;
+        this.success = false;
+        console.log("Error", error);
+      }
+    },
+    async createOrder() {
+      console.log("attempting to create user");
+      let URL = ServicesConfig["OrderService"];
+      try {
+        await orderService.addOrder(
+          URL,
+          this.customerID,
+          this.orderNumber,
+          this.orderDate
+        );
+        this.error = false;
+        this.success = true;
+        this.successMessage = "Successfully created the order!";
+        this.productList = await orderService.getAllOrders(URL);
+        this.customerID = "";
+        this.orderNumber = "";
+        this.orderDate = "";
       } catch (error) {
         this.error = true;
         this.success = false;
