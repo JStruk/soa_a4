@@ -34,21 +34,21 @@
               <td class="p-3 px-5">
                 <input
                   type="text"
-                  :v-model="customerList[index].firstName"
+                  v-model="customerList[index].firstName"
                   class="bg-transparent"
                 />
               </td>
               <td class="p-3 px-5">
                 <input
                   type="text"
-                  :value="customer.lastName"
+                  v-model="customerList[index].lastName"
                   class="bg-transparent"
                 />
               </td>
               <td class="p-3 px-5">
                 <input
                   type="text"
-                  :value="customer.phoneNumber"
+                  v-model="customerList[index].phoneNumber"
                   class="bg-transparent"
                 />
               </td>
