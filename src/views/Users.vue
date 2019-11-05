@@ -12,6 +12,18 @@
         >Cannot delete customer - customer has an order in transit</span
       >
     </div>
+    <div
+      v-if="success"
+      class="inline-flex items-center bg-white leading-none text-pink-600 rounded-full p-2 shadow text-teal text-sm"
+    >
+      <span
+        class="inline-flex bg-green-600 text-white rounded-full h-6 px-3 justify-center items-center"
+        >SUCCESS</span
+      >
+      <span class="inline-flex px-2 text-green-600"
+        >{{successMessage}}</span
+      >
+    </div>
     <div class="text-gray-900 bg-gray-200 about">
       <div class="p-4 flex">
         <h1 class="text-3xl">Users</h1>
@@ -24,7 +36,6 @@
               <th class="text-left p-3 px-5">Last Name</th>
               <th class="text-left p-3 px-5">Phone Number</th>
               <th class="text-left p-3 px-5">Role</th>
-              <th></th>
             </tr>
             <tr
               v-for="(customer,index) in customerList"
@@ -64,10 +75,10 @@
                   class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
                   @click="
                     saveUser(
-                      customer.custID,
-                      customer.firstName,
-                      customer.lastName,
-                      customer.phoneNumber
+                      customerList[index].custID,
+                      customerList[index].firstName,
+                      customerList[index].lastName,
+                      customerList[index].phoneNumber
                     )
                   "
                 >
@@ -77,6 +88,53 @@
                   type="button"
                   class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
                   @click="deleteUser(customer.custID)"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+            <tr
+  
+              class="border-b hover:bg-orange-100 bg-gray-100"
+            >
+            <td class="p-3 px-5">
+                <input
+                  type="text"
+                  class="bg-transparent"
+                  v-model="firstName"
+                />
+              </td>
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                  class="bg-transparent"
+                  v-model="lastName"
+                />
+              </td>
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                  class="bg-transparent"
+                  v-model="phoneNumber"
+                />
+              </td>
+              <td class="p-3 px-5">
+                <select value="user.role" class="bg-transparent">
+                  <option value="user">user</option>
+                  <option value="admin">admin</option>
+                </select>
+              </td>
+              <td class="p-3 px-5 flex justify-end">
+                <button
+                  type="button"
+                  class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                  @click="createUser()"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
                 >
                   Delete
                 </button>
@@ -98,7 +156,11 @@ export default {
     return {
       customerList: [],
       error: false,
-      firstName: ""
+      success: false,
+      successMessage: "",
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
     };
   },
   async created() {
@@ -119,6 +181,31 @@ export default {
           phoneNumber
         );
         this.error = false;
+        this.success = true;
+        this.successMessage = "Successfully updated the user!"
+      } catch (error) {
+        this.error = true;
+        this.success = false;
+        console.log("Error", error);
+      }
+    },
+    async createUser() {
+      console.log("attempting to create user");
+      let URL = ServicesConfig["CustomerService"];
+      try {
+        await customerService.addCustomer(
+          URL,
+          this.firstName,
+          this.lastName,
+          this.phoneNumber,
+        );
+        this.error = false;
+        this.success = true;
+        this.successMessage = "Successfully created the user!"
+        this.customerList = await customerService.getAllCustomers(URL);
+        this.firstName = "";
+        this.lastName = "";
+        this.phoneNumber = "";
       } catch (error) {
         this.error = true;
         console.log("Error", error);
@@ -129,8 +216,12 @@ export default {
       try {
         await customerService.deleteCustomer(URL, customerID);
         this.error = false;
+        this.success = true;
+        this.successMessage = "Successfully deleted the user!"
+        this.customerList = await customerService.getAllCustomers(URL);
       } catch (error) {
         this.error = true;
+        this.successMessage = false;
         console.log("Error", error);
       }
     }

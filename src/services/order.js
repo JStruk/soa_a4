@@ -12,6 +12,20 @@ export const getOrderDetails = async (url, id) => {
   return response.data;
 };
 
+
+/* METHOD		:   getAllCustomers
+ * DESCRIPTION	:   Calls the Customers REST API to get a JSON object of all customers
+ *
+ * PARAMETERS	:   url of API
+ * RETURNS		:   JSON object containing all customer records from API
+ *
+ */
+export const getAllOrders = async url => {
+  const response = await axios.get(url);
+  console.log(response.data);
+  return response.data;
+};
+
 /* METHOD		:   updateOrder
  * DESCRIPTION	:   performs a PUT request to the Orders REST API to update the Order with the supplied OrderID
  *

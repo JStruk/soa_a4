@@ -2,7 +2,9 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link>|
-      <router-link to="/users">Users</router-link>
+      <router-link to="/users">Users</router-link>|
+      <router-link to="/products">Products</router-link>|
+      <router-link to="/orders">Orders</router-link>|
     </div>
     <router-view />
     <button @click="onClick()">Test</button>
