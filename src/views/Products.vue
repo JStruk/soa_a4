@@ -95,6 +95,54 @@
                 </button>
               </td>
             </tr>
+            <tr
+  
+              class="border-b hover:bg-orange-100 bg-gray-100"
+            >
+            <td class="p-3 px-5">
+                <input
+                  type="text"
+                  class="bg-transparent"
+                  v-model="productName"
+                />
+              </td>
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                  class="bg-transparent"
+                  v-model="price"
+                />
+              </td>
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                  class="bg-transparent"
+                  v-model="weight"
+                />
+              </td>
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                  class="bg-transparent"
+                  v-model="inStock"
+                />
+              </td>
+              <td class="p-3 px-5 flex justify-end">
+                <button
+                  type="button"
+                  class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                  @click="createProduct()"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -113,6 +161,10 @@ export default {
       error: false,
       success: false,
       successMessage: "",
+      productName: "",
+      price: "",
+      weight: "",
+      inStock: "",
     };
   },
   async created() {
@@ -153,7 +205,31 @@ export default {
         this.success = false;
         console.log("Error", error);
       }
-    }
+    },
+    async createProduct() {
+      console.log("attempting to create user");
+      let URL = ServicesConfig["ProductService"];
+      try {
+        await productService.addProduct(
+          URL,
+          this.productName,
+          parseFloat(this.price),
+          parseFloat(this.weight),
+          this.inStock,
+        );
+        this.error = false;
+        this.success = true;
+        this.successMessage = "Successfully created the product!"
+        this.productList = await productService.getAllProducts(URL);
+        this.price = "";
+        this.weight = "";
+        this.inStock = "";
+      } catch (error) {
+        this.error = true;
+        this.success = false;
+        console.log("Error", error);
+      }
+    },
   }
 };
 </script>
