@@ -5,7 +5,8 @@
       <router-link to="/users">Users</router-link>|
       <router-link to="/products">Products</router-link>|
       <router-link to="/orders">Orders</router-link>|
-      <router-link to="/orders">Cart</router-link>
+      <router-link to="/carts">Cart</router-link>|
+      <router-link to="/search">Search</router-link>
     </div>
     <router-view />
     <button @click="onClick()">Test</button>
@@ -98,7 +99,6 @@ export default {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 
