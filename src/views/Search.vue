@@ -1,5 +1,59 @@
 <template>
   <div class="flex justify-center">
+    <div
+      v-if="visible"
+      @click.self="visible = false"
+      class="h-screen w-full absolute flex items-center justify-center bg-modal"
+    >
+      <div
+        class="bg-white rounded shadow p-8 m-4 max-w-xs max-h-full overflow-y-scroll our-modal flex"
+      >
+      <div class="inline-block mr-2">
+        <div class="mb-4">
+          <h1>Customers</h1>
+        </div>
+        <div class="mb-8">
+          <p v-for="customer in filteredCustomerList" v-bind:key="customer.custID">
+            {{customer.firstName}}
+          </p>
+        </div>
+        </div>
+         <div class="inline-block mr-2">
+        <div class="mb-4">
+          <h1>Carts</h1>
+        </div>
+        <div class="mb-8">
+          <p v-for="cart in filteredCartList" v-bind:key="cart.cartID">
+            {{cart.OrderID}}
+          </p>
+        </div>
+        </div>
+
+        <div class="inline-block mr-2">
+        <div class="mb-4">
+          <h1>Product</h1>
+        </div>
+        <div class="mb-8">
+          <p v-for="product in filteredProductList" v-bind:key="product.prodID">
+            {{product.prodName}}
+          </p>
+        </div>
+        </div>
+
+        <div class="inline-block mr-2">
+        <div class="mb-4">
+          <h1>Orders</h1>
+        </div>
+        <div class="mb-8">
+          <p v-for="order in filteredOrderList" v-bind:key="order.prodID">
+            {{order.OrderID}}
+          </p>
+        </div>
+        </div>
+
+      </div>
+    </div>
+
     <div class="inline-block">
       <form class="max-w-xl m-4 p-10 bg-white rounded shadow-xl">
         <p class="text-gray-800 font-medium">Customer information</p>
@@ -251,7 +305,12 @@ export default {
       orderDate: "",
       cartOrderID: "",
       cartProdID: "",
-      quantity: 0
+      quantity: 0,
+      visible: false,
+      filteredCustomerList: [],
+      filteredProductList: [],
+      filteredCartList: [],
+      filteredOrderList: [],
     };
   },
   methods: {
@@ -260,39 +319,44 @@ export default {
       let ProdURL = ServicesConfig["ProductService"];
       let orderURL = ServicesConfig["OrderService"];
       let cartURL = ServicesConfig["CartService"];
-      let filteredProductList = [];
-      let filteredCustomerList = [];
-      let filteredCartList = [];
-      let filteredOrderList = [];
 
-    if (this.firstName || this.lastName || this.phoneNumber) {
-      // filter customer
-      this.customerList = await customerService.getAllCustomers(CustURL);
-      filteredCustomerList = this.customerList.filter(function(customer) {
-        if (this.firstName) {
-          if (customer.firstName != this.firstName) {
-            return false;
+      this.filteredCustomerList = [];
+      this.filteredProductList = [];
+      this.filteredCartList = [];
+      this.filteredOrderList = [];
+
+
+      if (this.firstName || this.lastName || this.phoneNumber) {
+        // filter customer
+        this.customerList = await customerService.getAllCustomers(CustURL);
+        this.filteredCustomerList = this.customerList.filter(function(
+          customer
+        ) {
+          if (this.firstName) {
+            if (customer.firstName != this.firstName) {
+              return false;
+            }
           }
-        }
-        if (this.lastName) {
-          if (customer.lastName != this.lastName) {
-            return false;
+          if (this.lastName) {
+            if (customer.lastName != this.lastName) {
+              return false;
+            }
           }
-        }
-        if (this.phoneNumber) {
-          if (customer.phoneNumber != this.phoneNumber) {
-            return false;
+          if (this.phoneNumber) {
+            if (customer.phoneNumber != this.phoneNumber) {
+              return false;
+            }
           }
-        }
-        return true;
-      }, this);
-    }
+          return true;
+        },
+        this);
+      }
 
       if (this.productName || this.productPrice || this.productWeight) {
         // filter product
         this.productList = await productService.getAllProducts(ProdURL);
         //console.log('this is product list: ', this.productList);
-        filteredProductList = this.productList.filter(function(product) {
+        this.filteredProductList = this.productList.filter(function(product) {
           if (this.productName) {
             if (product.prodName != this.productName) {
               return false;
@@ -312,68 +376,66 @@ export default {
         }, this);
       }
 
-    if (this.orderID || this.custID || this.orderDate || this.poNumber) {
-      // filter order
-      this.orderList = Object.values(await orderService.getAllOrders(orderURL));
-      //console.log('this is order list: ', this.orderList);
-      filteredOrderList = this.orderList.filter(function(order) {
-        if (this.orderID) {
-          if (order.orderID != this.orderID) {
-            return false;
+      if (this.orderID || this.custID || this.orderDate || this.poNumber) {
+        // filter order
+        this.orderList = Object.values(
+          await orderService.getAllOrders(orderURL)
+        );
+        //console.log('this is order list: ', this.orderList);
+        this.filteredOrderList = this.orderList.filter(function(order) {
+          if (this.orderID) {
+            if (order.orderID != this.orderID) {
+              return false;
+            }
           }
-        }
-        if (this.custID) {
-          if (order.CustomerID != this.custID) {
-            return false;
+          if (this.custID) {
+            if (order.CustomerID != this.custID) {
+              return false;
+            }
           }
-        }
-        if (this.poNumber) {
-          if (order.PONumber != this.poNumber) {
-            return false;
+          if (this.poNumber) {
+            if (order.PONumber != this.poNumber) {
+              return false;
+            }
           }
-        }
-        if (this.orderDate) {
-          if (order.Date != this.orderDate) {
-            return false;
+          if (this.orderDate) {
+            if (order.Date != this.orderDate) {
+              return false;
+            }
           }
-        }
-        return true;
-      }, this);
-    }
+          return true;
+        }, this);
+      }
 
-    if (this.cartOrderID || this.cartProdID || this.quantity) {
-      // filter cart
-      this.cartList = Object.values(await cartService.getAllCarts(cartURL));
-      filteredCartList = this.cartList.filter(function(cart) {
-        if (this.cartOrderID) {
-          if (cart.OrderID != this.cartOrderID) {
-            return false;
+      if (this.cartOrderID || this.cartProdID || this.quantity) {
+        // filter cart
+        this.cartList = Object.values(await cartService.getAllCarts(cartURL));
+        this.filteredCartList = this.cartList.filter(function(cart) {
+          if (this.cartOrderID) {
+            if (cart.OrderID != this.cartOrderID) {
+              return false;
+            }
           }
-        }
-        if (this.cartProdID) {
-          if (cart.ProductID != this.cartProdID) {
-            return false;
+          if (this.cartProdID) {
+            if (cart.ProductID != this.cartProdID) {
+              return false;
+            }
           }
-        }
-        if (this.quantity) {
-          if (cart.quantity != this.quantity) {
-            return false;
+          if (this.quantity) {
+            if (cart.quantity != this.quantity) {
+              return false;
+            }
           }
-        }
-        return true;
-      }, this);
-    }
+          return true;
+        }, this);
+      }
 
-      this.finallySearch(
-        filteredCustomerList,
-        filteredProductList,
-        filteredOrderList,
-        filteredCartList
-      );
-      console.log("customer", filteredCustomerList);
-      console.log("product", filteredProductList);
-      console.log("order", filteredOrderList);
-      console.log("cart", filteredCartList);
+      
+      console.log("customer", this.filteredCustomerList);
+      console.log("product", this.filteredProductList);
+      console.log("order", this.filteredOrderList);
+      console.log("cart", this.filteredCartList);
+      this.visible = true;
     },
 
     finallySearch(
@@ -394,4 +456,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.our-modal {
+    width:32rem;
+}
+</style>

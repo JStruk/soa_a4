@@ -9,7 +9,6 @@
       <router-link to="/search">Search</router-link>
     </div>
     <router-view />
-    <button @click="onClick()">Test</button>
   </div>
 </template>
 
