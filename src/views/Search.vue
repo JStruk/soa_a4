@@ -1,59 +1,225 @@
 <template>
   <div class="flex justify-center">
+        	<div v-if="generatePurchase" @click.self="generatePurchase = false" class="h-screen w-full absolute flex items-center justify-center bg-modal">
+        <div class="bg-white rounded shadow p-8 m-4 max-w-xs max-h-full overflow-y-scroll">
+            <div class="mb-4">
+                <h1>Customer Information</h1>
+                <span class="mr-3">Order: 2</span>
+                <span>ID: 3</span>
+                <p>Name: Nathan Davis</p>
+                <p>Phone: 413-444-3425</p>
+                <p class="mb-4">PO: GDFD-342 </p>
+                <span class="mr-4">SubTotal:$54.64</span>
+                <span>Tax:$8.33</span>
+                <p>total:$63.02</p>
+            </div>
+        </div>
+    </div>
     <div
       v-if="visible"
       @click.self="visible = false"
       class="h-screen w-full absolute flex items-center justify-center bg-modal"
     >
-      <div
-        class="bg-white rounded shadow p-8 m-4 max-w-xs max-h-full overflow-y-scroll our-modal flex"
-      >
-      <div class="inline-block mr-2">
-        <div class="mb-4">
-          <h1>Customers</h1>
+      <div class="text-gray-900 bg-gray-200 about">
+        <div class="p-4 flex">
+          <h1 class="text-3xl">Users</h1>
         </div>
-        <div class="mb-8">
-          <p v-for="customer in filteredCustomerList" v-bind:key="customer.custID">
-            {{customer.firstName}}
-          </p>
+        <div class="px-3 py-4 flex justify-center">
+          <table class="w-full text-md bg-white shadow-md rounded mb-4">
+            <tbody>
+              <tr class="border-b">
+                <th class="text-left p-3 px-5">First Name</th>
+                <th class="text-left p-3 px-5">Last Name</th>
+                <th class="text-left p-3 px-5">Phone Number</th>
+              </tr>
+              <tr
+                v-for="(customer) in filteredCustomerList"
+                v-bind:key="customer.id"
+                class="border-b hover:bg-orange-100 bg-gray-100"
+              >
+                <td class="p-3 px-5">
+                  <input
+                    type="text"
+                    :value="customer.firstName"
+                    class="bg-transparent"
+                  />
+                </td>
+                <td class="p-3 px-5">
+                  <input
+                    type="text"
+                    :value="customer.lastName"
+                    class="bg-transparent"
+                  />
+                </td>
+                <td class="p-3 px-5">
+                  <input
+                    type="text"
+                    :value="customer.phoneNumber"
+                    class="bg-transparent"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        </div>
-         <div class="inline-block mr-2">
-        <div class="mb-4">
-          <h1>Carts</h1>
-        </div>
-        <div class="mb-8">
-          <p v-for="cart in filteredCartList" v-bind:key="cart.cartID">
-            {{cart.OrderID}}
-          </p>
-        </div>
-        </div>
-
-        <div class="inline-block mr-2">
-        <div class="mb-4">
-          <h1>Product</h1>
-        </div>
-        <div class="mb-8">
-          <p v-for="product in filteredProductList" v-bind:key="product.prodID">
-            {{product.prodName}}
-          </p>
-        </div>
-        </div>
-
-        <div class="inline-block mr-2">
-        <div class="mb-4">
-          <h1>Orders</h1>
-        </div>
-        <div class="mb-8">
-          <p v-for="order in filteredOrderList" v-bind:key="order.prodID">
-            {{order.OrderID}}
-          </p>
-        </div>
-        </div>
-
+         <div class="text-gray-900 bg-gray-200 about">
+      <div class="p-4 flex">
+        <h1 class="text-3xl">Products</h1>
+      </div>
+      <div class="px-3 py-4 flex justify-center">
+        <table class="w-full text-md bg-white shadow-md rounded mb-4">
+          <tbody>
+            <tr class="border-b">
+              <th class="text-left p-3 px-5">Product Name</th>
+              <th class="text-left p-3 px-5">Price</th>
+              <th class="text-left p-3 px-5">Weight</th>
+              <th class="text-left p-3 px-5">In Store</th>
+            </tr>
+            <tr
+              v-for="(product) in filteredProductList"
+              v-bind:key="product.prodID"
+              class="border-b hover:bg-orange-100 bg-gray-100"
+            >
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                  :value="product.prodName"
+                  class="bg-transparent"
+                />
+              </td>
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                  :value="product.price"
+                  class="bg-transparent"
+                />
+              </td>
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                  :value="product.prodWeight"
+                  class="bg-transparent"
+                />
+              </td>
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                 :value="product.inStock"
+                  class="bg-transparent"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
+
+    <div class="text-gray-900 bg-gray-200 about">
+      <div class="p-4 flex">
+        <h1 class="text-3xl">Orders</h1>
+      </div>
+      <div class="px-3 py-4 flex justify-center">
+        <table class="w-full text-md bg-white shadow-md rounded mb-4">
+          <tbody>
+            <tr class="border-b">
+              <th class="text-left p-3 px-5">Customer</th>
+              <th class="text-left p-3 px-5">order Number</th>
+              <th class="text-left p-3 px-5">Order Date</th>
+            </tr>
+            <tr
+              v-for="(order) in filteredOrderList"
+              v-bind:key="order.prodID"
+              class="border-b hover:bg-orange-100 bg-gray-100"
+            >
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                  :value="order.CustomerID"
+                  class="bg-transparent"
+                />
+              </td>
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                  :value="order.PONumber"
+                  class="bg-transparent"
+                />
+              </td>
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                 :value="order.Date"
+                  class="bg-transparent"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+
+    <div class="text-gray-900 bg-gray-200 about">
+      <div class="p-4 flex">
+        <h1 class="text-3xl">Carts</h1>
+      </div>
+      <div class="px-3 py-4 flex justify-center">
+        <table class="w-full text-md bg-white shadow-md rounded mb-4">
+          <tbody>
+            <tr class="border-b">
+              <th class="text-left p-3 px-5">Order ID</th>
+              <th class="text-left p-3 px-5">Product ID</th>
+              <th class="text-left p-3 px-5">Quantity</th>
+            </tr>
+            <tr
+              v-for="(cart) in filteredCartList"
+              v-bind:key="cart.orderID"
+              class="border-b hover:bg-orange-100 bg-gray-100"
+            >
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                  :value="cart.OrderID"
+                  class="bg-transparent"
+                />
+              </td>
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                  :value="cart.ProductID"
+                  class="bg-transparent"
+                />
+              </td>
+              <td class="p-3 px-5">
+                <input
+                  type="text"
+                  :value="cart.Quantity"
+                  class="bg-transparent"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+
+
+
+
+    </div>
+
+
+       
+
+
+
+
+
+    </div>
     <div class="inline-block">
       <form class="max-w-xl m-4 p-10 bg-white rounded shadow-xl">
         <p class="text-gray-800 font-medium">Customer information</p>
@@ -270,10 +436,16 @@
         </div>
       </form>
       <button
-        class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-2"
         @click="searchInput"
       >
         Search
+      </button>
+      <button
+        class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        @click="generatePO"
+      >
+        Generate Purchase Order
       </button>
     </div>
   </div>
@@ -311,6 +483,7 @@ export default {
       filteredProductList: [],
       filteredCartList: [],
       filteredOrderList: [],
+      generatePurchase: false,
     };
   },
   methods: {
@@ -324,7 +497,6 @@ export default {
       this.filteredProductList = [];
       this.filteredCartList = [];
       this.filteredOrderList = [];
-
 
       if (this.firstName || this.lastName || this.phoneNumber) {
         // filter customer
@@ -430,7 +602,6 @@ export default {
         }, this);
       }
 
-      
       console.log("customer", this.filteredCustomerList);
       console.log("product", this.filteredProductList);
       console.log("order", this.filteredOrderList);
@@ -451,13 +622,21 @@ export default {
         ...filteredCartList
       ];
       console.log(mergedArray);
-    }
+    },
+
+
+  generatePO() {
+    console.log('hit');
+    this.generatePurchase = true;
+  }
+
+
   }
 };
 </script>
 
 <style>
 .our-modal {
-    width:32rem;
+  width: 32rem;
 }
 </style>
